@@ -4,7 +4,7 @@
 $TeamsProcess = Get-Process -Name ms-teams -ErrorAction SilentlyContinue
 if ($TeamsProcess) {
     $TeamsProcPath = $TeamsProcess.Path
-    $TeamsProcess | Stop-Process -Force
+    $TeamsProcess | Stop-Process
     Write-Output "Microsoft Teams stopped"
 } else {
     $TeamsProcPath = $null
