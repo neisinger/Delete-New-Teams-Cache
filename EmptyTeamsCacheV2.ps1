@@ -1,8 +1,15 @@
 # For the new Teams client (V2) 
 
 # Stop Microsoft Teams if it is running
-$TeamsProcPath = (Get-Process ms-teams).Path
-Get-Process ms-teams | Stop-Process
+$TeamsProcess = Get-Process -Name ms-teams -ErrorAction SilentlyContinue
+if ($TeamsProcess) {
+    $TeamsProcPath = $TeamsProcess.Path
+    $TeamsProcess | Stop-Process
+    Write-Output "Microsoft Teams stopped"
+} else {
+    $TeamsProcPath = $null
+    Write-Output "Microsoft Teams is not running"
+}
 
 # Define the folders to delete
 $folders = @(
@@ -21,6 +28,10 @@ foreach ($folder in $folders) {
     }
 }
 
-
-# Restart Microsoft Teams
-Start-Process -FilePath $TeamsProcPath
+# Restart Microsoft Teams if it was running
+if ($TeamsProcPath) {
+    Start-Process -FilePath $TeamsProcPath
+    Write-Output "Microsoft Teams restarted"
+} else {
+    Write-Output "Microsoft Teams was not running, skipping restart"
+}
